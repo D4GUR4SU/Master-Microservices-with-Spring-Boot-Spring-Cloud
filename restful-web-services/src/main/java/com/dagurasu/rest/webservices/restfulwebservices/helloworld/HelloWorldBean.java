@@ -1,4 +1,4 @@
-package com.dagurasu.rest.webservices.restfulwebservices;
+package com.dagurasu.rest.webservices.restfulwebservices.helloworld;
 
 public class HelloWorldBean {
 
