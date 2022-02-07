@@ -2,6 +2,8 @@ package com.dagurasu.rest.webservices.restfulwebservices.user;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class UserResource {
 
 	@PostMapping("/users")
 	@ResponseStatus(HttpStatus.CREATED)
-	public User createUser(@RequestBody User user) {
+	public User createUser(@Valid @RequestBody User user) {
 		User savedUser = service.save(user);
 		return savedUser;
 	}
