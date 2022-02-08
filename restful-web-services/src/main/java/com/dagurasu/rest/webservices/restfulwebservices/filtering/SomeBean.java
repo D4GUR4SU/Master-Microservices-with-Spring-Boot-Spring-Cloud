@@ -1,11 +1,12 @@
 package com.dagurasu.rest.webservices.restfulwebservices.filtering;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFilter;
 
-@JsonIgnoreProperties(value = { "field1", "field2" })
+@JsonFilter("SomeBeanFilter")
 public class SomeBean {
 
 	private String field1;
+
 	private String field2;
 
 	private String field3;
