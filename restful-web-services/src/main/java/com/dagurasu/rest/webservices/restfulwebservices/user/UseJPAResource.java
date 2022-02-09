@@ -1,17 +1,17 @@
 package com.dagurasu.rest.webservices.restfulwebservices.user;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +25,6 @@ import com.dagurasu.rest.webservices.restfulwebservices.exception.UserNotFoundEx
 @RestController
 public class UseJPAResource {
 
-	@Autowired
-	private UserDaoService service;
-	
 	@Autowired
 	private UserRepository userRepository;
 
@@ -56,18 +53,13 @@ public class UseJPAResource {
 	@PostMapping("/jpa/users")
 	@ResponseStatus(HttpStatus.CREATED)
 	public User createUser(@Valid @RequestBody User user) {
-		User savedUser = service.save(user);
+		User savedUser = userRepository.save(user);
 		return savedUser;
 	}
 	
 	@DeleteMapping("/jpa/users/{id}")
-	public ResponseEntity<Object> deleteUser(@PathVariable int id) {
-		User user = service.deleteById(id);
-		
-		if (user == null)
-			throw new UserNotFoundException("id-" + id);
-		
-		return ResponseEntity.noContent().build();
+	public void deleteUser(@PathVariable int id) {
+		userRepository.deleteById(id);
 	}
 
 }
