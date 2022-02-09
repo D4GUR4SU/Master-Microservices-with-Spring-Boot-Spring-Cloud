@@ -1,6 +1,7 @@
 package com.dagurasu.rest.webservices.restfulwebservices.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -22,23 +23,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dagurasu.rest.webservices.restfulwebservices.exception.UserNotFoundException;
 
 @RestController
-public class UserResource {
+public class UseJPAResource {
 
 	@Autowired
 	private UserDaoService service;
+	
+	@Autowired
+	private UserRepository userRepository;
 
-	@GetMapping("/users")
+	@GetMapping("/jpa/users")
 	public List<User> retrieveAllUsers() {
-		return service.findAll();
+		return userRepository.findAll();
 	}
 
-	@GetMapping("/users/{id}")
+	@GetMapping("/jpa/users/{id}")
 	public EntityModel<User> retrieveUser(@PathVariable int id) {
-		User user = service.findOne(id);
-		if (user == null)
+		Optional<User> user = userRepository.findById(id);
+		
+		if (!user.isPresent())
 			throw new UserNotFoundException("id-" + id);
 		
-		EntityModel<User> model = EntityModel.of(user);
+		EntityModel<User> model = EntityModel.of(user.get());
 		
 		WebMvcLinkBuilder linkToUsers = 
 				linkTo(methodOn(this.getClass()).retrieveAllUsers());
@@ -48,14 +53,14 @@ public class UserResource {
 		return model;
 	}
 
-	@PostMapping("/users")
+	@PostMapping("/jpa/users")
 	@ResponseStatus(HttpStatus.CREATED)
 	public User createUser(@Valid @RequestBody User user) {
 		User savedUser = service.save(user);
 		return savedUser;
 	}
 	
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/jpa/users/{id}")
 	public ResponseEntity<Object> deleteUser(@PathVariable int id) {
 		User user = service.deleteById(id);
 		
